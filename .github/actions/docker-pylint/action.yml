@@ -1,0 +1,22 @@
+# action.yml
+name: 'Running Pylint in Docker'
+description: 'Run Pylint using cytopia/pylint Docker image on given directory'
+inputs:
+  src-path: #Path to the Source Root
+    description: 'Path to the Source Root'
+    required: true
+    default: '.'
+  min-score: #Minimum score for Pylint
+    description: 'Minimum Score for Pylint used for --fail-under option'
+    required: false
+    default: 8
+#outputs:
+#  time: # id of output
+#    description: 'The time we greeted you'
+runs:
+  using: 'docker'
+  image: 'cytopia/pylint'
+  args:
+    - --disable=import-error
+    - --fail-under=${{ inputs.min-score }}
+    - ${{ inputs.src-path }}

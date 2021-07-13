@@ -1,0 +1,29 @@
+name: Quality Gate
+
+on:
+  push:
+    branches:
+      - '*'
+jobs:
+  style:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Check Python Style with pylint
+      uses: ./.github/actions/docker-pylint
+      with:
+       src-path: './src'
+       min-score: 9.5 # default threshold is 8 for this action
+#       production ready code should have 9-9.5 threshold
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Unit Tests and Coverage
+        uses: ./.github/actions/docker-unittest

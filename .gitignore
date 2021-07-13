@@ -1,0 +1,10 @@
+.coverage
+logs
+**/*.log
+
+requirements.txt
+Pipfile.lock
+
+.idea
+
+**/__pycache__

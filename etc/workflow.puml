@@ -1,0 +1,53 @@
+@startuml
+
+actor "Product Owner"
+actor Developer
+actor "Senior Developer"
+
+database "Issue Tracker"
+database "Git"
+collections "Git Local"
+
+loop  many times 
+"Product Owner" -> "Issue Tracker" : craete issue
+end
+
+Developer -> "Issue Tracker" : assigne issue
+Developer -> "Git" : clone, pull
+"Git" -> "Git Local" : update
+Developer -> "Git Local" : Create Branch
+
+loop
+Developer -> "Git Local" : modify
+Developer -> "Git Local" : commit
+end
+
+Developer -> "Git Local" : push
+Developer -> "Git" : pull request
+"Git" -> "Issue Tracker" : create review issue
+"Issue Tracker" -> "Senior Developer" : notify
+group Code Review
+    "Senior Developer" -> "Git" : checkout branch
+    "Git" -> "Git Local" : update
+    "Senior Developer" -> "Issue Tracker" : mark, problems
+    alt change request
+        "Senior Developer" -> "Issue Tracker" : change request
+        "Issue Tracker" -> Developer : notify
+        loop
+            Developer -> "Git Local" : modify
+            Developer -> "Git Local" : commit
+        end
+        Developer -> "Git Local" : push
+        "Issue Tracker" -> "Senior Developer" : notify
+        "Senior Developer" -> "Senior Developer" : review changes again
+        "Senior Developer" -> "Issue Tracker" : close review
+    else approval
+    
+    "Developer" -> "Git" : merge branch to master
+    "Developer" -> "Git" : delete feature branch
+    "Developer" -> "Git Local" : delete feature branch
+    "Developer" -> "Issue Tracker" : close issue
+    end
+end
+
+@enduml

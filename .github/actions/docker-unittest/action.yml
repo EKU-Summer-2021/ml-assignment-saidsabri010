@@ -1,0 +1,6 @@
+# action.yml
+name: 'Python Tests'
+description: 'Runs unittest module on the tests directory'
+runs:
+  using: 'docker'
+  image: '../../../ci.Dockerfile'
