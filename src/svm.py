@@ -1,19 +1,20 @@
 """
    generate the model
 """
-
+import csv
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVR
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
-import csv
 
 
 class SupportVectorMachine:
     """
     class for svm
     """
+    def __init__(self):
+        self.data = pd.read_csv('https://raw.githubusercontent.com/saidsabri010/dataset/main/Concrete_Data_Yeh.csv')
 
     def __str__(self):
         return self.__class__.__name__
