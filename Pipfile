@@ -11,6 +11,7 @@ coverage = '*'
 numpy = '*'
 jupyter = "*"
 seaborn = "*"
+sklearn = "*"
 
 [requires]
 python_version = "3.8"
