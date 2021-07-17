@@ -7,11 +7,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVR
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
+from sklearn import preprocessing
 
-param_grid = {'C': [0.1, 1, 10, 100, 300, 500, 700, 1000],
-              'gamma': [1, 0.1, 0.2, 0.01, 0.001, 0.0001],
+# here i reduced the number of parameters because it takes too much time to get the results
+param_grid = {'C': [300, 500, 700],
+              'gamma': [1, 0.1, 0.2],
               'kernel': ['rbf'],
-              'epsilon': [0.2, 0.1]
+              'epsilon': [0.2]
               }
 
 
@@ -35,11 +37,14 @@ class SupportVectorMachine:
         data_y = dataframe['csMPa'].values.reshape(-1, 1)
         train_x, test_x, y_train, y_test = train_test_split(data_x, data_y, test_size=0.2)
         # this is for scaling
-        sc_x = StandardScaler()
-        sc_y = StandardScaler()
+        scalar = StandardScaler()
+        sc_x = scalar
+        sc_y = scalar
+        data_x = preprocessing.scale(data_x)
+        data_y = preprocessing.scale(data_y)
         sc_x.fit_transform(data_x)
         sc_y.fit_transform(data_y)
-        self.grid = GridSearchCV(SVR(), param_grid, refit=True, verbose=3)
+        self.grid = GridSearchCV(SVR(), param_grid, refit=True, verbose=3, n_jobs=-1)
         self.grid.fit(train_x, y_train)
         self.grid.score(test_x, y_test)
         # grid.best_estimator_

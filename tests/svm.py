@@ -26,10 +26,9 @@ class MyTestCase(unittest.TestCase):
     def test_run_grid_search_output(self):
         """
         test method : we test if the result is close the expected value
-        actually i do not know what to compare the result with so i just put 1 for now
         """
         result = self.data.run_grid_search()
-        expected = 1
+        expected = self.data.grid.cv_results_
         np.testing.assert_allclose(result, expected, rtol=0.2, atol=0)
 
     def test_save(self):
