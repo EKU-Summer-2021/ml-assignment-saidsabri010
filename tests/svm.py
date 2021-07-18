@@ -31,6 +31,14 @@ class MyTestCase(unittest.TestCase):
         expected = self.data.grid.cv_results_
         np.testing.assert_allclose(result, expected, rtol=0.2, atol=0)
 
+    def test_something(self):
+        """
+        test method : we test if the result is close the expected value
+        """
+        result = self.data.run_grid_search()
+        data = pd.DataFrame(result)
+        self.assertIsInstance(data, pd.DataFrame)
+
     def test_save(self):
         """
         test method : we check if we really saved the result in csv file as pandas dataframe

@@ -44,7 +44,6 @@ class SupportVectorMachine:
         data_y = preprocessing.scale(data_y)
         sc_x.fit_transform(data_x)
         sc_y.fit_transform(data_y)
-        self.grid = GridSearchCV(SVR(), param_grid, refit=True, verbose=3, n_jobs=-1)
         self.grid.fit(train_x, y_train)
         self.grid.score(test_x, y_test)
         # grid.best_estimator_
