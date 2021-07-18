@@ -38,12 +38,10 @@ class SupportVectorMachine:
         train_x, test_x, y_train, y_test = train_test_split(data_x, data_y, test_size=0.2)
         # this is for scaling
         scalar = StandardScaler()
-        sc_x = scalar
-        sc_y = scalar
         data_x = preprocessing.scale(data_x)
         data_y = preprocessing.scale(data_y)
-        sc_x.fit_transform(data_x)
-        sc_y.fit_transform(data_y)
+        scalar.fit_transform(data_x)
+        scalar.fit_transform(data_y)
         self.grid.fit(train_x, y_train)
         self.grid.score(test_x, y_test)
         # grid.best_estimator_
