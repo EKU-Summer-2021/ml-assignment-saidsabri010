@@ -69,5 +69,3 @@ class SupportVectorMachine:
         # create file inside the created directory structure
         get_score = pd.DataFrame(get_score)
         get_score.to_csv(complete_name)
-
-        return get_score
