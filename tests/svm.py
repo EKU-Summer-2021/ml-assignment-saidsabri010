@@ -2,6 +2,7 @@
 this is a unittest model
 """
 import unittest
+import os
 import pandas as pd
 from src.svm import SupportVectorMachine
 
@@ -31,5 +32,6 @@ class MyTestCase(unittest.TestCase):
         """
                test method : we test if the output is an instance of dataframe
         """
-        expected_get_score = pd.DataFrame
-        self.assertIsInstance(self.data.save(), expected_get_score)
+        dir_path = os.getcwd()
+        self.data.save()
+        self.assertTrue(os.path.exists(dir_path))
