@@ -81,6 +81,7 @@ class SupportVectorMachine:
         train_x, test_x, y_train, y_test = train_test_split(data_x, data_y, test_size=0.2)
         self.grid.fit(train_x, y_train)
         plt.scatter(test_x, y_test)
+        plt.plot(train_x, self.grid.predict(y_train), color="blue")
         plt.title('Support vector machine')
 
         # save plot

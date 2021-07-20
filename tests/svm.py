@@ -24,15 +24,6 @@ class MyTestCase(unittest.TestCase):
         data = pd.DataFrame(result)
         self.assertIsInstance(data, pd.DataFrame)
 
-    def test_run_grid_search_output(self):
-        """
-            test method : we test if the output is close to the expected one
-        """
-        result = self.data.run_grid_search()
-        data = pd.read_csv(r"C:\Users\HP\PycharmProjects\ml-assignment-saidsabri010\tests\StoredResults\score.csv")
-        expected = pd.DataFrame(data)
-        self.assertEqual(np.isclose(result, expected, rtol=0.7, atol=0), True)
-
     def test_save(self):
         """
                test method : we test if the output is an instance of dataframe
@@ -43,8 +34,9 @@ class MyTestCase(unittest.TestCase):
 
     def test_plotting(self):
         """
-        test method: we test if the score is higher than 0.2
+        test method: we test if the score is close to the expected one
         """
         actual = self.data.plot_svm()
-        expected = 0.2
-        self.assertGreater(actual, expected)
+        expected = 0.4
+        boolean = np.isclose(actual, expected, rtol=0.3)
+        self.assertEqual(boolean, True)
