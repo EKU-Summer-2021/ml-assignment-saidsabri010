@@ -3,6 +3,7 @@
 """
 import os
 import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVR
 from sklearn.model_selection import GridSearchCV
@@ -69,3 +70,26 @@ class SupportVectorMachine:
         # create file inside the created directory structure
         get_score = pd.DataFrame(get_score)
         get_score.to_csv(complete_name)
+
+    def plot_svm(self):
+        """
+        this function plot the results and save it and return the score
+        """
+        dataframe = pd.read_csv('https://raw.githubusercontent.com/saidsabri010/dataset/main/Concrete_Data_Yeh.csv')
+        data_x = dataframe['coarseaggregate'].values.reshape(-1, 1)
+        data_y = dataframe['csMPa'].values.reshape(-1, 1)
+        train_x, test_x, y_train, y_test = train_test_split(data_x, data_y, test_size=0.2)
+        self.grid.fit(train_x, y_train)
+        plt.scatter(test_x, y_test)
+        plt.title('Support vector machine')
+
+        # save plot
+        filename = "score.csv"
+        # create directory structure
+        directory = "StoredResults"
+        parent_dir = os.getcwd()
+        path = os.path.join(parent_dir, directory)
+        complete_name = os.path.join(path, filename)
+        plt.savefig(complete_name + 'plot.png')
+        plt.show()
+        return self.grid.score(train_x, y_train)
