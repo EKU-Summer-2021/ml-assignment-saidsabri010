@@ -14,7 +14,11 @@ class MyTestCase(unittest.TestCase):
     """
 
     def setUp(self):
-        self.data = SupportVectorMachine()
+        self.data = SupportVectorMachine({'C': [300, 500, 700],
+                                          'gamma': [1, 0.1, 0.2],
+                                          'kernel': ['rbf'],
+                                          'epsilon': [0.2]
+                                          })
 
     def test_run_grid_search(self):
         """
