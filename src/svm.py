@@ -11,11 +11,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn import preprocessing
 
 # here i reduced the number of parameters because it takes too much time to get the results
-param_grid = {'C': [300, 500, 700],
-              'gamma': [1, 0.1, 0.2],
-              'kernel': ['rbf'],
-              'epsilon': [0.2]
-              }
 
 
 class SupportVectorMachine:
@@ -23,7 +18,7 @@ class SupportVectorMachine:
     class for svm
     """
 
-    def __init__(self):
+    def __init__(self, param_grid):
         self.grid = GridSearchCV(SVR(), param_grid, refit=True, verbose=3)
 
     def __str__(self):
@@ -44,6 +39,8 @@ class SupportVectorMachine:
         scalar.fit_transform(data_x)
         scalar.fit_transform(data_y)
         self.grid.fit(train_x, y_train)
+        y_pred = self.grid.predict(test_x)
+        scalar.inverse_transform(y_pred)
         self.grid.score(test_x, y_test)
         # grid.best_estimator_
         return self.grid.cv_results_
