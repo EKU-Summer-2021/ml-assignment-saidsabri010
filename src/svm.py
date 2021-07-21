@@ -16,8 +16,9 @@ class SupportVectorMachine:
     class for svm
     """
 
-    def __init__(self, param_grid):
+    def __init__(self, param_grid, data_x, data_y):
         self.grid = GridSearchCV(SVR(), param_grid, refit=True, verbose=3)
+        self.train_x, self.test_x, self.y_train, self.y_test = train_test_split(data_x, data_y, test_size=0.2)
 
     def __str__(self):
         return self.__class__.__name__
@@ -29,15 +30,14 @@ class SupportVectorMachine:
         dataframe = pd.read_csv('https://raw.githubusercontent.com/saidsabri010/dataset/main/Concrete_Data_Yeh.csv')
         data_x = dataframe['coarseaggregate'].values.reshape(-1, 1)
         data_y = dataframe['csMPa'].values.reshape(-1, 1)
-        train_x, test_x, y_train, y_test = train_test_split(data_x, data_y, test_size=0.2)
         # this is for scaling
         scalar = StandardScaler()
         data_x = preprocessing.scale(data_x)
         data_y = preprocessing.scale(data_y)
         scalar.fit_transform(data_x)
         scalar.fit_transform(data_y)
-        self.grid.fit(train_x, y_train)
-        self.grid.score(test_x, y_test)
+        self.grid.fit(self.train_x, self.y_train)
+        self.grid.score(self.test_x, self.y_test)
         # grid.best_estimator_
         return self.grid.cv_results_
 
@@ -64,23 +64,18 @@ class SupportVectorMachine:
         get_score = pd.DataFrame(get_score)
         get_score.to_csv(complete_name)
 
-    def plot_svm(self):
+    def plot_svm(self, data_x, data_y):
         """
         this function plot the results and save it and return the score
         """
-        dataframe = pd.read_csv('https://raw.githubusercontent.com/saidsabri010/dataset/main/Concrete_Data_Yeh.csv')
-        data_x = dataframe['coarseaggregate'].values.reshape(-1, 1)
-        data_y = dataframe['csMPa'].values.reshape(-1, 1)
-        train_x, test_x, y_train, y_test = train_test_split(data_x, data_y, test_size=0.2)
-        self.grid.fit(train_x, y_train)
         scalar = StandardScaler()
         scalar.fit_transform(data_x)
         scalar.fit_transform(data_y)
-        y_pred = self.grid.predict(test_x)
+        self.grid.fit(self.train_x, self.y_train)
+        y_pred = self.grid.predict(self.test_x)
         scalar.inverse_transform(y_pred)
-        plt.scatter(y_test, y_pred)
+        plt.scatter(self.y_test, y_pred)
         plt.title('Support vector machine')
-
         # save plot
         filename = "results.csv"
         # create directory structure
@@ -90,4 +85,8 @@ class SupportVectorMachine:
         complete_name = os.path.join(path, filename)
         plt.savefig(complete_name + 'plot.png')
         plt.show()
-        return self.grid.score(train_x, y_train)
+        plt.scatter(self.test_x, self.y_test)
+        plt.scatter(self.train_x, self.y_train, color="red")
+        plt.savefig(complete_name + 'plot.png')
+        plt.show()
+        return self.grid.score(self.train_x, self.y_train)

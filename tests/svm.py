@@ -14,11 +14,13 @@ class MyTestCase(unittest.TestCase):
     """
 
     def setUp(self):
+        dataframe = pd.read_csv('https://raw.githubusercontent.com/saidsabri010/dataset/main/Concrete_Data_Yeh.csv')
         self.data = SupportVectorMachine({'C': [300, 500, 700],
                                           'gamma': [1, 0.1, 0.2],
                                           'kernel': ['rbf'],
                                           'epsilon': [0.2]
-                                          })
+                                          }, dataframe['coarseaggregate'].values.reshape(-1, 1),
+                                         dataframe['csMPa'].values.reshape(-1, 1))
 
     def test_run_grid_search(self):
         """
@@ -40,7 +42,9 @@ class MyTestCase(unittest.TestCase):
         """
         test method: we test if the score is close to the expected one
         """
-        actual = self.data.plot_svm()
+        dataframe = pd.read_csv('https://raw.githubusercontent.com/saidsabri010/dataset/main/Concrete_Data_Yeh.csv')
+        actual = self.data.plot_svm(dataframe['coarseaggregate'].values.reshape(-1, 1),
+                                    dataframe['csMPa'].values.reshape(-1, 1))
         expected = 0.4
         boolean = np.isclose(actual, expected, rtol=0.3)
         self.assertEqual(boolean, True)
