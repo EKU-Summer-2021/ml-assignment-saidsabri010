@@ -9,4 +9,4 @@ if __name__ == '__main__':
                                      'kernel': ['rbf'],
                                      'epsilon': [0.2]
                                      })
-    print(instance.save())
+    print(instance.plot_svm())

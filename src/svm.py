@@ -10,8 +10,6 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn import preprocessing
 
-# here i reduced the number of parameters because it takes too much time to get the results
-
 
 class SupportVectorMachine:
     """
@@ -39,8 +37,6 @@ class SupportVectorMachine:
         scalar.fit_transform(data_x)
         scalar.fit_transform(data_y)
         self.grid.fit(train_x, y_train)
-        y_pred = self.grid.predict(test_x)
-        scalar.inverse_transform(y_pred)
         self.grid.score(test_x, y_test)
         # grid.best_estimator_
         return self.grid.cv_results_
@@ -53,7 +49,7 @@ class SupportVectorMachine:
             get_score = self.run_grid_search()
         get_score = self.run_grid_search()
         # save the score in a csv file
-        filename = "score.csv"
+        filename = "results.csv"
         # create directory structure
         directory = "StoredResults"
         parent_dir = os.getcwd()
@@ -77,12 +73,16 @@ class SupportVectorMachine:
         data_y = dataframe['csMPa'].values.reshape(-1, 1)
         train_x, test_x, y_train, y_test = train_test_split(data_x, data_y, test_size=0.2)
         self.grid.fit(train_x, y_train)
-        plt.scatter(test_x, y_test)
-        plt.plot(train_x, self.grid.predict(y_train), color="blue")
+        scalar = StandardScaler()
+        scalar.fit_transform(data_x)
+        scalar.fit_transform(data_y)
+        y_pred = self.grid.predict(test_x)
+        scalar.inverse_transform(y_pred)
+        plt.scatter(y_test, y_pred)
         plt.title('Support vector machine')
 
         # save plot
-        filename = "score.csv"
+        filename = "results.csv"
         # create directory structure
         directory = "StoredResults"
         parent_dir = os.getcwd()
