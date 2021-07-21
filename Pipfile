@@ -9,6 +9,10 @@ coverage = '*'
 
 [packages]
 numpy = '*'
+jupyter = "*"
+seaborn = "*"
+sklearn = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.8"
