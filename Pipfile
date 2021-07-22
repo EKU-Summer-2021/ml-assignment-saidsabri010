@@ -9,6 +9,10 @@ coverage = '*'
 
 [packages]
 numpy = '*'
+scikit-learn = "*"
+sklearn = "*"
+pydotplus = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.8"
