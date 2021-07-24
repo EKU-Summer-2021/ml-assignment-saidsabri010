@@ -9,10 +9,9 @@ coverage = '*'
 
 [packages]
 numpy = '*'
-pandas = '*'
-scikit-learn = "*"
+jupyter = "*"
+seaborn = "*"
 sklearn = "*"
-pydotplus = "*"
 matplotlib = "*"
 
 [requires]
