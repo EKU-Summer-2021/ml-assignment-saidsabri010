@@ -3,6 +3,7 @@ this is a unittest model
 """
 import unittest
 import os
+import numpy as np
 import pandas as pd
 from src.decisiontree import DecisionTree
 
@@ -41,6 +42,6 @@ class MyTestCase(unittest.TestCase):
         """
         test method: we test if the score is close to the expected one
         """
-        actual = self.data.plot_decision()
         expected = 0.7
-        self.assertGreater(actual, expected)
+        boolean = np.isclose(self.data.plot_decision(), expected, rtol=0.3)
+        self.assertEqual(boolean, True)

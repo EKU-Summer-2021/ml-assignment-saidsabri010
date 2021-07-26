@@ -5,6 +5,7 @@ import os
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn import tree
+from sklearn.metrics import plot_confusion_matrix
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.tree import DecisionTreeClassifier
 
@@ -62,6 +63,7 @@ class DecisionTree:  # pylint: disable= R0902
         """
         if self.grid is None:
             self.run_grid_search()
+        plot_confusion_matrix(self.grid.best_estimator_, self.test_x, self.y_test)
         # save plot
         filename = "results.csv"
         # create directory structure
@@ -69,7 +71,10 @@ class DecisionTree:  # pylint: disable= R0902
         parent_dir = os.getcwd()
         path = os.path.join(parent_dir, directory)
         complete_name = os.path.join(path, filename)
-        tree.plot_tree(self.grid.best_estimator_)
+        plt.savefig(complete_name + 'plot.pdf')
+        plt.show()
+        tree.plot_tree(self.grid.best_estimator_, feature_names=self.train_x.columns, class_names=['no', 'yes'],
+                       filled=True)
         plt.savefig(complete_name + 'plot.png')
         plt.show()
         return self.grid.score(self.train_x, self.y_train)
