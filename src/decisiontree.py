@@ -4,13 +4,12 @@ this module is for decision tree
 import os
 import matplotlib.pyplot as plt
 import pandas as pd
-import numpy as np
 from sklearn import tree
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.tree import DecisionTreeClassifier
 
 
-class DecisionTree: # pylint: disable= R0902
+class DecisionTree:  # pylint: disable= R0902
     """
     decision tree class
     """
@@ -63,12 +62,6 @@ class DecisionTree: # pylint: disable= R0902
         """
         if self.grid is None:
             self.run_grid_search()
-        y_pred = self.grid.predict(self.test_x)
-        plt.bar(y_pred, self.y_test, color=['blue', 'red'])
-        bars = ('y_pred', 'y_test')
-        x_pos = np.arange(len(bars))
-        plt.xticks(x_pos, bars)
-        plt.title('Decision Tree')
         # save plot
         filename = "results.csv"
         # create directory structure
@@ -76,8 +69,6 @@ class DecisionTree: # pylint: disable= R0902
         parent_dir = os.getcwd()
         path = os.path.join(parent_dir, directory)
         complete_name = os.path.join(path, filename)
-        plt.savefig(complete_name + 'diabetes.png')
-        plt.show()
         tree.plot_tree(self.grid.best_estimator_)
         plt.savefig(complete_name + 'plot.png')
         plt.show()

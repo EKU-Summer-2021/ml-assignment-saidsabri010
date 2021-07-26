@@ -42,5 +42,5 @@ class MyTestCase(unittest.TestCase):
         test method: we test if the score is close to the expected one
         """
         actual = self.data.plot_decision()
-        expected = 0.6
+        expected = 0.7
         self.assertGreater(actual, expected)
