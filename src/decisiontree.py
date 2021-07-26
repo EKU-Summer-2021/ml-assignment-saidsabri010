@@ -4,14 +4,13 @@ this module is for decision tree
 import os
 import matplotlib.pyplot as plt
 import pandas as pd
-from sklearn import preprocessing
 from sklearn import tree
+from sklearn.metrics import plot_confusion_matrix
 from sklearn.model_selection import GridSearchCV, train_test_split
-from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeClassifier
 
 
-class DecisionTree:
+class DecisionTree:  # pylint: disable= R0902
     """
     decision tree class
     """
@@ -19,7 +18,8 @@ class DecisionTree:
     def __init__(self, param_grid, data_x, data_y):
         self.data_x = data_x
         self.data_y = data_y
-        self.grid = GridSearchCV(DecisionTreeClassifier(), param_grid, refit=True)
+        self.grid = None
+        self.param_grid = param_grid
         self.train_x, self.test_x, self.y_train, self.y_test = train_test_split(data_x, data_y, test_size=0.2)
 
     def __str__(self):
@@ -29,18 +29,9 @@ class DecisionTree:
         """
         this function will clean,read,split into train and test
         """
-        dataframe = pd.read_csv('https://raw.githubusercontent.com/saidsabri010/credit_card_dataset/main/diabetes.csv')
-        data_x = dataframe[['Pregnancies', 'Glucose', 'BloodPressure',
-                            'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']]
-        scalar = StandardScaler()
-        data_x = preprocessing.scale(data_x)
-        # data_y = preprocessing.scale(data_y)
-        scalar.fit_transform(data_x)
-        # data_y = scalar.fit_transform(data_y)
+        self.grid = GridSearchCV(DecisionTreeClassifier(), self.param_grid, refit=True)
         self.grid.fit(self.train_x, self.y_train)
         self.grid.score(self.test_x, self.y_test)
-        # y_pred = self.grid.predict(self.test_x)
-        # return metrics.accuracy_score(y_test, y_pred)
         return self.grid.cv_results_
 
     def save(self):
@@ -53,7 +44,7 @@ class DecisionTree:
         # save the score in a csv file
         filename = "results.csv"
         # create directory structure
-        directory = "StoredResults"
+        directory = "StoredDecisionTreeResults"
         parent_dir = os.getcwd()
         path = os.path.join(parent_dir, directory)
         complete_name = os.path.join(path, filename)
@@ -70,31 +61,20 @@ class DecisionTree:
         """
         this function plot the results and save it and return the score
         """
-        scalar = StandardScaler()
-        scalar.fit_transform(self.data_x)
-        scalar.fit_transform(self.data_y)
-        self.grid.fit(self.train_x, self.y_train)
-        y_pred = self.grid.predict(self.test_x)
-        plt.scatter(self.y_test, y_pred)
-        plt.title('Decision Tree')
+        if self.grid is None:
+            self.run_grid_search()
+        plot_confusion_matrix(self.grid.best_estimator_, self.test_x, self.y_test)
         # save plot
         filename = "results.csv"
         # create directory structure
-        directory = "StoredResults"
+        directory = "StoredDecisionTreeResults"
         parent_dir = os.getcwd()
         path = os.path.join(parent_dir, directory)
         complete_name = os.path.join(path, filename)
-        plt.savefig(complete_name + 'diabetes.png')
+        plt.savefig(complete_name + 'plot.pdf')
         plt.show()
-        # plot tree
-        clf = tree.DecisionTreeClassifier(max_depth=3, random_state=42)
-        clf.fit(self.train_x, self.y_train)
-        plt.figure(figsize=(15, 10))
-        tree.plot_tree(clf,
-                       max_depth=3,
-                       rounded=True,
+        tree.plot_tree(self.grid.best_estimator_, feature_names=self.train_x.columns, class_names=['no', 'yes'],
                        filled=True)
-
         plt.savefig(complete_name + 'plot.png')
         plt.show()
         return self.grid.score(self.train_x, self.y_train)
