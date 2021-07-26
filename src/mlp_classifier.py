@@ -64,7 +64,7 @@ class MlpClassifier:
         scalar = StandardScaler()
         scalar.fit_transform(data_x)
         scalar.fit_transform(data_y)
-        self.grid.fit(self.train_x, self.y_train)
+        self.run_mlp()
         plt.plot(self.train_x, self.y_train, color='green', alpha=0.8, label='Train')
         plt.plot(self.test_x, self.y_test, color='magenta', alpha=0.8, label='Test')
         plt.title('Multi layer Perceptron')

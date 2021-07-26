@@ -14,7 +14,8 @@ instance = MlpClassifier(data[['Pregnancies', 'Glucose', 'BloodPressure',
                              'activation': ['tanh', 'relu', 'logistic'],
                              'solver': ['lbfgs', 'sgd', 'adam'],
                              'alpha': [0.0001, 0.05],
-                             'learning_rate': ['constant', 'adaptive'],
+                             'learning_rate': ['constant', 'adaptive', 'invscaling'],
+                             'learning_rate_init': [0.001, 0.002, 0.003]
                          }
                          )
 
