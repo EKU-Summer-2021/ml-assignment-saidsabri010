@@ -6,8 +6,8 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn import metrics
+from sklearn.metrics import plot_confusion_matrix
 from sklearn.neural_network import MLPClassifier
-from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, GridSearchCV
 
 
@@ -19,7 +19,8 @@ class MlpClassifier:
     def __init__(self, data_x, data_y, param_grid):
         self.data_x = data_x
         self.data_y = data_y
-        self.grid = GridSearchCV(MLPClassifier(), param_grid,  n_jobs=-1, cv=3)
+        self.grid = None
+        self.param_grid = param_grid
         self.train_x, self.test_x, self.y_train, self.y_test = train_test_split(data_x, data_y, test_size=0.2)
 
     def __str__(self):
@@ -29,6 +30,7 @@ class MlpClassifier:
         """
         this function will run our neural network
         """
+        self.grid = GridSearchCV(MLPClassifier(), self.param_grid, n_jobs=-1, cv=3)
         self.grid.fit(self.train_x, self.y_train)
         y_pred = self.grid.predict(self.test_x)
         metrics.accuracy_score(self.y_test, y_pred)
@@ -57,19 +59,14 @@ class MlpClassifier:
         get_score = pd.DataFrame(get_score)
         get_score.to_csv(complete_name)
 
-    def plot_mlp(self, data_x, data_y):
+    def plot_mlp(self):
         """
         this function plot the results and save it and return the score
         """
-        scalar = StandardScaler()
-        scalar.fit_transform(data_x)
-        scalar.fit_transform(data_y)
-        self.run_mlp()
-        plt.plot(self.train_x, self.y_train, color='green', alpha=0.8, label='Train')
-        plt.plot(self.test_x, self.y_test, color='magenta', alpha=0.8, label='Test')
+        if self.grid is None:
+            self.run_mlp()
+        plot_confusion_matrix(self.grid.best_estimator_, self.test_x, self.y_test)
         plt.title('Multi layer Perceptron')
-        plt.xlabel('Epochs')
-        plt.legend(loc='upper left')
 
         # save plot
         filename = "MLPResults.csv"

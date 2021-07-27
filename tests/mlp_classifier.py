@@ -49,10 +49,7 @@ class MyTestCase(unittest.TestCase):
         """
         test method: we test if the score is close to the expected one
         """
-        data = pd.read_csv('https://raw.githubusercontent.com/saidsabri010/credit_card_dataset/main/diabetes.csv')
-        actual = self.data.plot_mlp(data[['Pregnancies', 'Glucose', 'BloodPressure',
-                                        'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']].values.reshape(-1, 1),
-                                    data['Outcome'].values.reshape(-1, 1))
+        actual = self.data.plot_mlp()
         expected = 0.7
         boolean = np.isclose(actual, expected, rtol=0.3)
         self.assertEqual(boolean, True)

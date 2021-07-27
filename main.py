@@ -19,7 +19,4 @@ instance = MlpClassifier(data[['Pregnancies', 'Glucose', 'BloodPressure',
                          }
                          )
 
-print(instance.plot_mlp(data[['Pregnancies', 'Glucose', 'BloodPressure',
-                              'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']]
-                        .values.reshape(-1, 1),
-                        data['Outcome'].values.reshape(-1, 1)))
+print(instance.plot_mlp())
