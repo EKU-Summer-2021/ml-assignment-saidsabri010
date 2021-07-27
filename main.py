@@ -2,14 +2,21 @@
 this is the main module
 """
 import pandas as pd
-import numpy as np
-from src.decisiontree import DecisionTree
+from src.mlp_classifier import MlpClassifier
 
-dataframe = pd.read_csv('https://raw.githubusercontent.com/saidsabri010/credit_card_dataset/main/diabetes.csv')
-instance = DecisionTree({'criterion': ['gini', 'entropy'], 'max_depth': np.arange(3, 15)},
-                        dataframe[['Pregnancies', 'Glucose', 'BloodPressure',
-                                   'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']]
-                        ,
-                        dataframe['Outcome'])
+data = pd.read_csv('https://raw.githubusercontent.com/saidsabri010/credit_card_dataset/main/diabetes.csv')
+data = pd.DataFrame(data)
+instance = MlpClassifier(data[['Pregnancies', 'Glucose', 'BloodPressure',
+                               'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']],
+                         data['Outcome'],
+                         {
+                             'hidden_layer_sizes': [(50, 50, 50), (50, 100, 50), (100,)],
+                             'activation': ['tanh', 'relu', 'logistic'],
+                             'solver': ['lbfgs', 'sgd', 'adam'],
+                             'alpha': [0.0001, 0.05],
+                             'learning_rate': ['constant', 'adaptive', 'invscaling'],
+                             'learning_rate_init': [0.001, 0.002, 0.003]
+                         }
+                         )
 
-print(instance.plot_decision())
+print(instance.plot_mlp())
