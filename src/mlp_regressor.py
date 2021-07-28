@@ -17,7 +17,6 @@ class MLPRepressor:    # pylint: disable=R0902
 
     def __init__(self, data_x, data_y, param_grid):
         self.data_x = data_x
-        self.data_y = data_y
         self.grid = None
         self.param_grid = param_grid
         self.train_x, self.test_x, self.y_train, self.y_test = train_test_split(data_x, data_y, test_size=0.2)
@@ -29,6 +28,8 @@ class MLPRepressor:    # pylint: disable=R0902
         """
         this function will run our neural network
         """
+        scalar = StandardScaler()
+        scalar.fit(self.data_x)
         self.grid = GridSearchCV(MLPRegressor(), self.param_grid, n_jobs=-1, cv=3)
         self.grid.fit(self.train_x, self.y_train)
         # y_pred = self.grid.predict(self.test_x)
@@ -57,16 +58,13 @@ class MLPRepressor:    # pylint: disable=R0902
         get_score = pd.DataFrame(get_score)
         get_score.to_csv(complete_name)
 
-    def plot_mlp(self, data_x):
+    def plot_mlp(self):
         """
         this function plot the results and save it and return the score
         """
         if self.grid is None:
             self.run_mlp()
-        scalar = StandardScaler()
-        scalar.fit(data_x)
         y_pred = self.grid.predict(self.test_x)
-        scalar.inverse_transform(y_pred)
         plt.scatter(self.y_test, y_pred, color='green')
         plt.plot(self.y_test, y_pred, color='red')
         plt.title('Multi layer Perceptron')

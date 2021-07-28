@@ -14,6 +14,4 @@ instance = MLPRepressor(data[['cement', 'slag', 'flyash',
                          "solver": ["lbfgs", "sgd", "adam"], "alpha": [0.00005, 0.0005]}
                         )
 
-print(instance.plot_mlp(data[['cement', 'slag', 'flyash',
-                              'water', 'superplasticizer', 'coarseaggregate', 'fineaggregate', 'age']]
-                        .values.reshape(-1, 1)))
+print(instance.plot_mlp())
