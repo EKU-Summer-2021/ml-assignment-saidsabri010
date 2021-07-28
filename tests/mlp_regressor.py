@@ -44,10 +44,7 @@ class MyTestCase(unittest.TestCase):
         """
         test method: we test if the score is close to the expected one
         """
-        data = pd.read_csv('https://raw.githubusercontent.com/saidsabri010/dataset/main/Concrete_Data_Yeh.csv')
-        actual = self.data.plot_mlp(data[['cement', 'slag', 'flyash',
-                                          'water', 'superplasticizer', 'coarseaggregate', 'fineaggregate', 'age']]
-                                    .values.reshape(-1, 1))
+        actual = self.data.plot_mlp()
         expected = 0.7
         boolean = np.isclose(actual, expected, rtol=0.3)
         self.assertEqual(boolean, True)
