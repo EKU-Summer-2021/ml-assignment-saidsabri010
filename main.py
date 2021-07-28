@@ -2,21 +2,16 @@
 this is the main module
 """
 import pandas as pd
-from src.mlp_classifier import MlpClassifier
+from src.mlp_regressor import MLPRepressor
 
-data = pd.read_csv('https://raw.githubusercontent.com/saidsabri010/credit_card_dataset/main/diabetes.csv')
+data = pd.read_csv('https://raw.githubusercontent.com/saidsabri010/dataset/main/Concrete_Data_Yeh.csv')
 data = pd.DataFrame(data)
-instance = MlpClassifier(data[['Pregnancies', 'Glucose', 'BloodPressure',
-                               'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']],
-                         data['Outcome'],
-                         {
-                             'hidden_layer_sizes': [(50, 50, 50), (50, 100, 50), (100,)],
-                             'activation': ['tanh', 'relu', 'logistic'],
-                             'solver': ['lbfgs', 'sgd', 'adam'],
-                             'alpha': [0.0001, 0.05],
-                             'learning_rate': ['constant', 'adaptive', 'invscaling'],
-                             'learning_rate_init': [0.001, 0.002, 0.003]
-                         }
-                         )
+instance = MLPRepressor(data[['cement', 'slag', 'flyash',
+                              'water', 'superplasticizer', 'coarseaggregate', 'fineaggregate', 'age']]
+                        ,
+                        data['csMPa'],
+                        {"hidden_layer_sizes": [(1,), (50,)], "activation": ["identity", "logistic", "tanh", "relu"],
+                         "solver": ["lbfgs", "sgd", "adam"], "alpha": [0.00005, 0.0005]}
+                        )
 
 print(instance.plot_mlp())
